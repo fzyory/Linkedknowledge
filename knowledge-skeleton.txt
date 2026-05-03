@@ -1,0 +1,6 @@
+Java后端知识骨架
+├─ Java基础（并发/集合/JVM）
+├─ Spring核心（IoC/AOP/事务/MVC/包扫描）
+├─ 数据存储（MySQL/MyBatis/Redis）
+├─ 工程化（Maven/Git/部署）
+└─ 项目业务（当前模块）
