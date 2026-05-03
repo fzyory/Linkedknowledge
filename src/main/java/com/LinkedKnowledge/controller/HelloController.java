@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 
 public class HelloController {
+
     @GetMapping("/hello")
     public String sayHello() {
-        // 3. 返回给用户的内容
-        return "Hello, Linked Knowledge!";
+        // 测试学习记录系统 - 这是一个测试注释
+        return "Hello, Linked Knowledge! 学习记录系统测试中...";
     }
 }
 
