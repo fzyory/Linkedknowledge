@@ -9,8 +9,8 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String sayHello() {
-        // 第二次测试 - 验证hooks自动触发
-        return "Hello, Linked Knowledge! Hooks测试第2轮";
+        // 第三次测试 - 验证Git原生hooks
+        return "Hello, Linked Knowledge! Git hooks测试";
     }
 }
 
