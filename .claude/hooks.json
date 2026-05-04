@@ -2,11 +2,11 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "Bash(git commit:*)",
+        "matcher": "Bash(git commit*)",
         "hooks": [
           {
             "type": "command",
-            "command": "claude run skill log-knowledge"
+            "command": "/log-knowledge"
           }
         ]
       }
