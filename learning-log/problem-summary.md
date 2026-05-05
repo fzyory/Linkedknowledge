@@ -32,3 +32,41 @@
 
 ---
 
+
+---
+
+## 2026-05-05 Java 版本不匹配（续）— mvn spring-boot:run 启动失败
+
+**问题现象：**
+```
+$ mvn spring-boot:run
+# 项目无法启动（或编译报错）
+```
+
+**根本原因：**
+- 系统 `mvn` 使用系统环境变量 JAVA_HOME（Java 8）
+- 项目需要 Java 17（Spring Boot 3.x + pom.xml 配置）
+- `use-java17.bat` 开的是新 cmd 窗口，在 PowerShell 中无效
+
+**解决方案（不修改系统变量）：**
+```powershell
+$env:JAVA_HOME = "C:\Users\g\.jdks\ms-17.0.19"
+cd ~\Desktop\linkedknowledge
+.\mvnw.cmd spring-boot:run
+```
+
+**关键区别（vs 上次）：**
+- 上次用 `mvn`（系统 Maven），这次用 `mvnw`（Maven Wrapper）
+- Maven Wrapper 会读取 `.mvn/jvm.config` 和 `pom.xml`，是项目自带的正确入口
+- `.mvn/jvm.config` 里配了 `-Djava.home=...` 但实际不生效，仍需设 `$env:JAVA_HOME`
+- 临时 env var 只在当前 PowerShell 窗口有效，关闭即恢复
+
+**相关知识点：**
+- Maven Wrapper（`mvnw`）vs 系统 Maven（`mvn`）的区别
+- `$env:JAVA_HOME` 作用域：仅当前 session
+- IDEA Terminal vs 系统 PowerShell 的环境差异
+
+**预防措施：**
+- 以后从命令行跑项目，直接用 `mvnw.cmd` 代替 `mvn`
+- 启动前置步骤：设 JAVA_HOME → 用 mvnw 跑
+
