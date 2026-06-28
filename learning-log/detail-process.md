@@ -140,3 +140,32 @@ src/main/resources/application.yml
 思考路径：[待补充]
 ```
 
+
+## 2026-06-28 15:35:22 - feat: 接入大模型 + 思维导图生成 + 修 4 个真实 bug
+
+```
+时间戳：2026-06-28 15:35:22
+操作：feat: 接入大模型 + 思维导图生成 + 修 4 个真实 bug
+提交哈希：d75feb1
+变更文件：
+compile.bat
+learning-log/detail-process.md
+pom.xml
+src/main/java/com/LinkedKnowledge/common/LlmClient.java
+src/main/java/com/LinkedKnowledge/common/Result.java
+src/main/java/com/LinkedKnowledge/config/SecurityConfig.java
+src/main/java/com/LinkedKnowledge/controller/AuthController.java
+src/main/java/com/LinkedKnowledge/controller/KnowledgeNodeController.java
+src/main/java/com/LinkedKnowledge/controller/MindMapController.java
+src/main/java/com/LinkedKnowledge/dto/MindMapGenerateRequest.java
+src/main/java/com/LinkedKnowledge/dto/MindMapNode.java
+src/main/java/com/LinkedKnowledge/entity/User.java
+src/main/java/com/LinkedKnowledge/service/MindMapService.java
+src/main/java/com/LinkedKnowledge/service/MindMapServiceImpl.java
+src/main/java/com/LinkedKnowledge/service/UserService.java
+src/main/java/com/LinkedKnowledge/service/UserServiceImpl.java
+src/main/resources/application.yml
+骨架节点：未分类
+思考路径：[待补充]
+```
+

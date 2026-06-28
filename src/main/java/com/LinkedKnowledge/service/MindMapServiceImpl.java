@@ -2,12 +2,15 @@ package com.LinkedKnowledge.service;
 
 import com.LinkedKnowledge.common.LlmClient;
 import com.LinkedKnowledge.dto.MindMapNode;
+import com.LinkedKnowledge.entity.MindMap;
+import com.LinkedKnowledge.repository.MindMapRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +20,7 @@ import java.util.regex.Pattern;
 public class MindMapServiceImpl implements MindMapService {
 
     private final LlmClient llmClient;
+    private final MindMapRepository mindMapRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
@@ -39,7 +43,59 @@ public class MindMapServiceImpl implements MindMapService {
             "5. topic 控制在 12 个汉字以内。\n";
 
     @Override
-    public MindMapNode generateMindMap(String topic, String context) {
+    public MindMap generateAndSave(Long userId, String topic, String context) {
+        // 1. 调大模型生成树
+        MindMapNode rootNode = generateTree(topic, context);
+
+        // 2. 序列化为 JSON
+        String treeJson;
+        try {
+            treeJson = objectMapper.writeValueAsString(rootNode);
+        } catch (Exception e) {
+            log.error("序列化导图失败", e);
+            throw new RuntimeException("导图序列化失败: " + e.getMessage());
+        }
+
+        // 3. 存库
+        MindMap mindMap = new MindMap();
+        mindMap.setTitle(topic);
+        mindMap.setTopic(topic);
+        mindMap.setContext(context);
+        mindMap.setTreeJson(treeJson);
+        mindMap.setUserId(userId);
+        MindMap saved = mindMapRepository.save(mindMap);
+        log.info("思维导图已存库 id={} topic={} userId={}", saved.getId(), topic, userId);
+        return saved;
+    }
+
+    @Override
+    public List<MindMap> listByUser(Long userId) {
+        return mindMapRepository.findByUserIdOrderByUpdatedAtDesc(userId);
+    }
+
+    @Override
+    public MindMap getById(Long userId, Long id) {
+        MindMap mindMap = mindMapRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("导图不存在 id=" + id));
+        // 权限校验：只能看自己的
+        if (!mindMap.getUserId().equals(userId)) {
+            throw new RuntimeException("无权访问该导图");
+        }
+        return mindMap;
+    }
+
+    @Override
+    public MindMapNode parseTreeJson(String treeJson) {
+        try {
+            return objectMapper.readValue(treeJson, MindMapNode.class);
+        } catch (Exception e) {
+            throw new RuntimeException("导图 JSON 解析失败: " + e.getMessage());
+        }
+    }
+
+    // ===== 内部方法 =====
+
+    private MindMapNode generateTree(String topic, String context) {
         String userPrompt;
         if (context == null || context.isBlank()) {
             userPrompt = "主题：" + topic + "\n请生成思维导图。";
@@ -51,7 +107,6 @@ public class MindMapServiceImpl implements MindMapService {
         String raw = llmClient.chat(SYSTEM_PROMPT, userPrompt);
         log.debug("大模型原始返回: {}", raw);
 
-        // 容错：万一模型多嘴加了 ```json 之类，剥掉
         String cleaned = stripCodeFence(raw);
 
         try {
@@ -65,7 +120,6 @@ public class MindMapServiceImpl implements MindMapService {
 
     private String stripCodeFence(String raw) {
         String s = raw.trim();
-        // 去掉 ```json ... ``` 或 ``` ... ```
         Pattern p = Pattern.compile("^```(?:json)?\\s*\\n?(.*?)\\n?```$", Pattern.DOTALL);
         Matcher m = p.matcher(s);
         if (m.matches()) {
