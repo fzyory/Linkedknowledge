@@ -9,13 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
 import java.time.Duration;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthController{
+public class AuthController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final RedisTemplate<String, String> redisTemplate;
@@ -28,20 +27,22 @@ public class AuthController{
                 request.getPassword(),
                 request.getEmail()
         );
-        user.setPassword(null); // 返回时不带密码
+        user.setPassword(null);
         return Result.success(user);
     }
 
     // POST /api/auth/login
     @PostMapping("/login")
-    public Result<User> login(@RequestBody LoginRequest request,HttpServletResponse response) {
+    public Result<User> login(@RequestBody LoginRequest request, HttpServletResponse response) {
         User user = userService.login(
                 request.getUsername(),
                 request.getPassword()
         );
         user.setPassword(null);
-        Cookie c=new Cookie("token",jwtUtil.generateToken(user.getId(),user.getUsername()));
-        c.setHttpOnly(true);c.setSecure(true);c.setPath("/");
+        Cookie c = new Cookie("token", jwtUtil.generateToken(user.getId(), user.getUsername()));
+        c.setHttpOnly(true);
+        c.setSecure(true);
+        c.setPath("/");
         response.addCookie(c);
         return Result.success(user);
     }
@@ -60,23 +61,40 @@ public class AuthController{
                 }
             }
         }
-        return Result.success(null);
+        return Result.success();
     }
-    // GET /api/auth/me
-    @GetMapping("/me")
-    public Result<void> me(HttpServletRequest request,HttpServletResponse response){
-        Cookie cookie =request.getCookies();
-        String userid= jwtUtil.parseToken(cookie);
 
+    // GET /api/auth/me —— 当前登录用户信息
+    @GetMapping("/me")
+    public Result<User> me(HttpServletRequest request) {
+        String token = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if (token == null || !jwtUtil.validateToken(token)) {
+            return Result.error(401, "未登录或 token 无效");
+        }
+        Long userId = jwtUtil.getUserId(token);
+        User user = userService.findById(userId);
+        if (user == null) {
+            return Result.error(404, "用户不存在");
+        }
+        user.setPassword(null);
+        return Result.success(user);
     }
 }
 
-// 放在同一个文件里?/
+// 放在同一个文件里
 class RegisterRequest {
     private String username;
     private String password;
     private String email;
-    // getter/setter
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
     public String getPassword() { return password; }

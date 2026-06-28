@@ -16,12 +16,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    // 注入 JWT 过滤器，@RequiredArgsConstructor 会自动生成构造器
+    private final JwtAuthFilter jwtAuthFilter;
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-      // 注入你刚写的过滤器
 
 
     // === 2. 核心：定义安全规则链 ===
@@ -39,9 +40,11 @@ public class SecurityConfig {
         // 2.3 配置哪些接口需要认证、哪些公开
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/login", "/api/auth/register")
-                .permitAll()                       // 登录注册 → 公开
-                .anyRequest()
-                .authenticated()                   // 其余 → 需要登录
+                                .permitAll()                       // 登录注册 → 公开
+                                .requestMatchers("/api/mindmap/**")
+                                .permitAll()                       // 思维导图生成 → 公开（AI 接口）
+                                .anyRequest()
+                                .authenticated()                   // 其余 → 需要登录
         );
 
         // 2.4 把你的 JwtAuthFilter 插到 Spring Security 过滤器链里

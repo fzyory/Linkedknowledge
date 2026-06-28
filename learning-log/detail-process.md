@@ -103,3 +103,40 @@ learning-log/detail-process.md
 思考路径：[待补充]
 ```
 
+
+## 2026-06-28 13:15:14 - snapshot: 当前项目状态（JWT + User + KnowledgeNode 完整版）
+
+```
+时间戳：2026-06-28 13:15:14
+操作：snapshot: 当前项目状态（JWT + User + KnowledgeNode 完整版）
+提交哈希：bafd1e5
+变更文件：
+-H
+-d
+curl
+knowledge-skeleton.txt
+learning-log/detail-process.md
+pom.xml
+src/main/java/com/LinkedKnowledge/LinkedKnowledgeApplication.java
+src/main/java/com/LinkedKnowledge/common/GlobalExceptionHandler.java
+src/main/java/com/LinkedKnowledge/common/JwtAuthFilter.java
+src/main/java/com/LinkedKnowledge/common/JwtUtil.java
+src/main/java/com/LinkedKnowledge/common/Result.java
+src/main/java/com/LinkedKnowledge/config/RedisConfig.java
+src/main/java/com/LinkedKnowledge/config/SecurityConfig.java
+src/main/java/com/LinkedKnowledge/controller/AuthController.java
+src/main/java/com/LinkedKnowledge/controller/KnowledgeNodeController.java
+src/main/java/com/LinkedKnowledge/demo/CollectionDemo.java
+src/main/java/com/LinkedKnowledge/entity/KnowledgeNode.java
+src/main/java/com/LinkedKnowledge/entity/User.java
+src/main/java/com/LinkedKnowledge/repository/KnowledgeNodeRepository.java
+src/main/java/com/LinkedKnowledge/repository/UserRepository.java
+src/main/java/com/LinkedKnowledge/service/KnowledgeNodeService.java
+src/main/java/com/LinkedKnowledge/service/KnowledgeNodeServiceImpl.java
+src/main/java/com/LinkedKnowledge/service/UserService.java
+src/main/java/com/LinkedKnowledge/service/UserServiceImpl.java
+src/main/resources/application.yml
+骨架节点：未分类
+思考路径：[待补充]
+```
+

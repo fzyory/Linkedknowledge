@@ -3,6 +3,7 @@ package com.LinkedKnowledge.controller;
 import com.LinkedKnowledge.common.Result;
 import com.LinkedKnowledge.entity.KnowledgeNode;
 import com.LinkedKnowledge.entity.NodeType;
+import com.LinkedKnowledge.service.KnowledgeNodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

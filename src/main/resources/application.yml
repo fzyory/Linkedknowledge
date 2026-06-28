@@ -30,3 +30,10 @@ jwt:
   secret: 8ezLNia/ik8/HoB94SBHwcjijvLcfYFSDbb4b2nFM48=
 server:
   port: 8080
+
+# 大模型配置
+llm:
+  api-key: ${MINIMAX_CN_API_KEY:}
+  base-url: https://api.minimaxi.com/v1
+  model: MiniMax-Text-01
+  timeout-seconds: 60
