@@ -24,10 +24,13 @@ public class User {
     @Column(unique = true, length = 100)
     private String email;
 
+    @Column(unique = true, length = 20)
+    private String phone;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // ===== Lombok @Data 展开 =====
+    // ===== Lombok @Data 展开 =====/
 
     public User() {}
 
@@ -51,6 +54,9 @@ public class User {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
@@ -69,6 +75,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{id=" + id + ", username='" + username + "', email='" + email + "'}";
+        return "User{id=" + id + ", username='" + username + "', email='" + email + "', phone='" + phone + "'}";
     }
 }

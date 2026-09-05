@@ -6,11 +6,14 @@ import com.LinkedKnowledge.entity.MindMap;
 import com.LinkedKnowledge.repository.MindMapRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,9 +90,52 @@ public class MindMapServiceImpl implements MindMapService {
     @Override
     public MindMapNode parseTreeJson(String treeJson) {
         try {
-            return objectMapper.readValue(treeJson, MindMapNode.class);
+            JsonNode root = objectMapper.readTree(treeJson);
+            if (root.has("nodeData")) {
+                return objectMapper.treeToValue(root.get("nodeData"), MindMapNode.class);
+            }
+            return objectMapper.treeToValue(root, MindMapNode.class);
         } catch (Exception e) {
             throw new RuntimeException("导图 JSON 解析失败: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Object getTreePayload(Long userId, Long id) {
+        MindMap map = getById(userId, id);
+        try {
+            JsonNode root = objectMapper.readTree(map.getTreeJson());
+            if (root.has("nodeData")) {
+                Map<String, Object> out = new LinkedHashMap<>();
+                out.put("nodeData", objectMapper.convertValue(root.get("nodeData"), Object.class));
+                out.put("arrows", root.has("arrows") ? objectMapper.convertValue(root.get("arrows"), Object.class) : List.of());
+                return out;
+            }
+            Map<String, Object> out = new LinkedHashMap<>();
+            out.put("nodeData", objectMapper.convertValue(root, Object.class));
+            out.put("arrows", List.of());
+            return out;
+        } catch (Exception e) {
+            throw new RuntimeException("导图 JSON 解析失败: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public MindMap updateFull(Long userId, Long id, String title, Object nodeData, Object arrows) {
+        MindMap map = getById(userId, id);
+        try {
+            if (nodeData != null) {
+                ObjectNode root = objectMapper.createObjectNode();
+                root.set("nodeData", objectMapper.valueToTree(nodeData));
+                root.set("arrows", objectMapper.valueToTree(arrows == null ? List.of() : arrows));
+                map.setTreeJson(objectMapper.writeValueAsString(root));
+            }
+            if (title != null && !title.isBlank() && !"null".equals(title)) {
+                map.setTitle(title);
+            }
+            return mindMapRepository.save(map);
+        } catch (Exception e) {
+            throw new RuntimeException("保存导图失败: " + e.getMessage());
         }
     }
 

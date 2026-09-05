@@ -39,7 +39,7 @@ public class SecurityConfig {
 
         // 2.3 配置哪些接口需要认证、哪些公开
                 http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/auth/register")
+                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/sms/**")
                         .permitAll()                       // 登录注册 → 公开
                         .anyRequest()
                         .authenticated()                   // 其余 → 需要登录

@@ -13,8 +13,8 @@
 
 ## 2. 核心业务链路 (Business Logic)
 ### 2.1 用户与认证 (User & Auth)
-- [ ] **注册流程**: 从 Controller 接收参数 -> Service 校验 -> Mapper 入库。
-- [ ] **登录/JWT**: 密码加密验证、Token 生成、拦截器校验 Token。
+- [1] **注册流程**: 从 Controller 接收参数 -> Service 校验 -> Mapper 入库。
+- [1] **登录/JWT**: 密码加密验证、Token 生成、拦截器校验 Token。
 - [ ] **权限控制**: 用户只能操作自己的笔记（UserId 透传与校验）。
 
 ### 2.2 知识节点 (Knowledge Node)
