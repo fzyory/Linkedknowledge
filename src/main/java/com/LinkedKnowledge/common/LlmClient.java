@@ -44,13 +44,7 @@ public class LlmClient {
                 .build();
     }
 
-    /**
-     * 调一次大模型对话，返回模型回复的 content 字段原始字符串
-     *
-     * @param systemPrompt 系统提示词
-     * @param userPrompt   用户提示词
-     * @return 模型回复（可能含 markdown / JSON，调用方自行处理）
-     */
+
     public boolean isConfigured() {
         return apiKey != null && !apiKey.isBlank();
     }
@@ -90,7 +84,26 @@ public class LlmClient {
 
             // 3. 发送请求
             try (Response response = httpClient.newCall(request).execute()) {
-                String responseBody = response.body() != null ? response.body().string() : "";
+                // 显式 UTF-8 解码响应体，避免中文字符被当 GBK 处理
+                String responseBody = "";
+                if (response.body() != null) {
+                    byte[] bytes = response.body().bytes();
+                    // === DEBUG: 写 raw bytes 到文件，绕过 logback 缓冲 ===
+                    try {
+                        java.nio.file.Files.write(
+                                java.nio.file.Paths.get("/tmp/llm-raw-response.bin"),
+                                bytes
+                        );
+                    } catch (Exception ignore) {}
+                    responseBody = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+                    // === DEBUG: 写 decoded body 到文件 ===
+                    try {
+                        java.nio.file.Files.writeString(
+                                java.nio.file.Paths.get("/tmp/llm-raw-response.txt"),
+                                responseBody
+                        );
+                    } catch (Exception ignore) {}
+                }
                 if (!response.isSuccessful()) {
                     log.error("大模型调用失败 status={} body={}", response.code(), responseBody);
                     throw new RuntimeException("大模型调用失败: HTTP " + response.code() + " - " + responseBody);
@@ -104,6 +117,7 @@ public class LlmClient {
                 return choices.get(0).get("message").get("content").asText();
             }
         } catch (Exception e) {
+            log.error("=====DEBUG LlmClient error=====", e);
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
             }

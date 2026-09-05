@@ -20,16 +20,28 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
     open-in-view: false
+
   data:
     redis:
       host: localhost
       port: 6379
       password:
       database: 0
-jwt:
-  secret: 8ezLNia/ik8/HoB94SBHwcjijvLcfYFSDbb4b2nFM48=
+
+  jackson:
+    default-encoding: UTF-8
+    encoding: UTF-8
+
 server:
   port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+jwt:
+  secret: 8ezLNia/ik8/HoB94SBHwcjijvLcfYFSDbb4b2nFM48=
 
 auth:
   cookie:
@@ -48,8 +60,9 @@ sms:
   dev-echo: true
 
 # 大模型配置
+# 注意：key 用 yml 的双引号包起来防止 yaml alias 解析
 llm:
-  api-key: ${MINIMAX_CN_API_KEY:}
+  api-key: "${LLM_API_KEY:PLACEHOLDER_PUT_REAL_KEY_HERE}"
   base-url: https://api.minimaxi.com/v1
   model: MiniMax-Text-01
   timeout-seconds: 60
