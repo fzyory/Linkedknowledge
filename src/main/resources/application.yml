@@ -59,6 +59,22 @@ sms:
   webhook-url: ${SMS_WEBHOOK:}
   dev-echo: true
 
+auth:
+  cookie:
+    name: token
+    http-only: true
+    secure: false
+    same-site: Lax
+    path: /
+    max-age-seconds: 604800
+
+sms:
+  cooldown-seconds: 60
+  ttl-seconds: 300
+  max-fails: 5
+  webhook-url: ${SMS_WEBHOOK:}
+  dev-echo: true
+
 # 大模型配置
 # 注意：key 用 yml 的双引号包起来防止 yaml alias 解析
 llm:
