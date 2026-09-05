@@ -26,4 +26,9 @@ public interface MindMapService {
      * 解析导图 JSON 为树形结构（前端渲染用）
      */
     MindMapNode parseTreeJson(String treeJson);
+
+    /** 返回 { nodeData, arrows }，兼容旧数据只有一棵树 */
+    Object getTreePayload(Long userId, Long id);
+
+    MindMap updateFull(Long userId, Long id, String title, Object nodeData, Object arrows);
 }

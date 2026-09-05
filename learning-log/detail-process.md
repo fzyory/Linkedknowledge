@@ -169,3 +169,19 @@ src/main/resources/application.yml
 思考路径：[待补充]
 ```
 
+
+## 2026-09-04 20:20:31 - chore: 清掉误生成的 curl 文件，并加入 AuthCookieProperties。
+
+```
+时间戳：2026-09-04 20:20:31
+操作：chore: 清掉误生成的 curl 文件，并加入 AuthCookieProperties。
+提交哈希：bced785
+变更文件：
+-H
+-d
+curl
+src/main/java/com/LinkedKnowledge/config/AuthCookieProperties.java
+骨架节点：未分类
+思考路径：[待补充]
+```
+

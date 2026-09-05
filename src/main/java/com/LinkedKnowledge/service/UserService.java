@@ -7,5 +7,11 @@ public interface UserService {
 
     User login(String username, String password);
 
+    User loginOrRegisterByPhone(String phone);
+
     User findById(Long id);
+
+    void deleteAccount(Long userId, String password);
+
+    void changePassword(Long userId, String oldPassword, String newPassword);
 }

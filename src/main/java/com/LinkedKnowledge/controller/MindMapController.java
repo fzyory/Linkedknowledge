@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 思维导图 Controller
@@ -84,16 +85,34 @@ public class MindMapController {
      * 获取导图的树形 JSON（直接给前端渲染用）
      */
     @GetMapping("/{id}/tree")
-    public Result<MindMapNode> getTree(@PathVariable Long id, HttpServletRequest httpReq) {
+    public Result<Object> getTree(@PathVariable Long id, HttpServletRequest httpReq) {
         Long userId = requireUserId(httpReq);
         if (userId == null) {
             return Result.error(401, "请先登录");
         }
         try {
-            MindMap map = mindMapService.getById(userId, id);
-            return Result.success(mindMapService.parseTreeJson(map.getTreeJson()));
+            return Result.success(mindMapService.getTreePayload(userId, id));
         } catch (RuntimeException e) {
             return Result.error(404, e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public Result<MindMap> update(@PathVariable Long id, @RequestBody Map<String, Object> body, HttpServletRequest httpReq) {
+        Long userId = requireUserId(httpReq);
+        if (userId == null) {
+            return Result.error(401, "请先登录");
+        }
+        try {
+            Object nodeData = body.get("nodeData");
+            Object arrows = body.get("arrows");
+            String title = body.get("title") == null ? null : String.valueOf(body.get("title"));
+            if (nodeData == null && body.get("id") != null) {
+                nodeData = body;
+            }
+            return Result.success(mindMapService.updateFull(userId, id, title, nodeData, arrows));
+        } catch (RuntimeException e) {
+            return Result.error(400, e.getMessage());
         }
     }
 

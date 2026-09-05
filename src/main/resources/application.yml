@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/linkedknowledge?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
-    username: root
+    username: root            #将在本地运行的mysql设计成有网址是因为方便其他人在这个面调用数据
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
@@ -30,6 +30,22 @@ jwt:
   secret: 8ezLNia/ik8/HoB94SBHwcjijvLcfYFSDbb4b2nFM48=
 server:
   port: 8080
+
+auth:
+  cookie:
+    name: token
+    http-only: true
+    secure: false
+    same-site: Lax
+    path: /
+    max-age-seconds: 604800
+
+sms:
+  cooldown-seconds: 60
+  ttl-seconds: 300
+  max-fails: 5
+  webhook-url: ${SMS_WEBHOOK:}
+  dev-echo: true
 
 # 大模型配置
 llm:

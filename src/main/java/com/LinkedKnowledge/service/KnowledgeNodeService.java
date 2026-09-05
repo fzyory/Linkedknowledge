@@ -8,17 +8,20 @@ import java.util.List;
 public interface KnowledgeNodeService {
     KnowledgeNode createNode(KnowledgeNode node);
 
-    KnowledgeNode updateNode(Long id, KnowledgeNode updateNode);
+    KnowledgeNode updateNode(Long id, KnowledgeNode updateNode, Long userId);
 
-    void deleteNode(Long id);
+    void deleteNode(Long id, Long userId);
 
-    KnowledgeNode getNodeById(Long id);
+    KnowledgeNode getNodeById(Long id, Long userId);
 
-    List<KnowledgeNode> getNodesByType(NodeType type);
+    List<KnowledgeNode> getNodesByType(NodeType type, Long userId);
 
-    List<KnowledgeNode> getAllNodes();
+    List<KnowledgeNode> getAllNodes(Long userId);
 
-    List<KnowledgeNode> getRootNodes();
+    List<KnowledgeNode> getRootNodes(Long userId);
 
-    List<KnowledgeNode> searchByTitle(String keyword);
+    List<KnowledgeNode> searchByTitle(String keyword, Long userId);
+
+    /** 节点不存在或不属于该用户时抛 RuntimeException */
+    void assertOwned(Long nodeId, Long userId);
 }

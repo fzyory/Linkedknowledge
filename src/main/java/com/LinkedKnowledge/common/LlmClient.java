@@ -51,8 +51,12 @@ public class LlmClient {
      * @param userPrompt   用户提示词
      * @return 模型回复（可能含 markdown / JSON，调用方自行处理）
      */
+    public boolean isConfigured() {
+        return apiKey != null && !apiKey.isBlank();
+    }
+
     public String chat(String systemPrompt, String userPrompt) {
-        if (apiKey == null || apiKey.isBlank()) {
+        if (!isConfigured()) {
             throw new IllegalStateException("llm.api-key 未配置（请设置环境变量 MINIMAX_CN_API_KEY）");
         }
 
