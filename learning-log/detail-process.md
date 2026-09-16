@@ -185,3 +185,68 @@ src/main/java/com/LinkedKnowledge/config/AuthCookieProperties.java
 思考路径：[待补充]
 ```
 
+
+## 2026-09-05 18:28:22 - feat: add graph, tags, vault, memory and wiki-link APIs
+
+```
+时间戳：2026-09-05 18:28:22
+操作：feat: add graph, tags, vault, memory and wiki-link APIs
+提交哈希：ac8c014
+变更文件：
+.claude/hooks.json
+.claude/skills/log-knowledge.md
+.claude/skills/log-to-knowledge-base.md
+.idea.backup.20260421_100249/.gitignore
+.idea.backup.20260421_100249/compiler.xml
+.idea.backup.20260421_100249/encodings.xml
+.idea.backup.20260421_100249/jarRepositories.xml
+.idea.backup.20260421_100249/misc.xml
+docs/ARCHITECTURE.md
+docs/DEVELOPMENT-LOG.md
+docs/cursor-tasks/00-README.md
+docs/cursor-tasks/P0-data-model-edges.md
+docs/cursor-tasks/P1-bi-directional-links.md
+docs/cursor-tasks/P3-graph-view-frontend.md
+docs/cursor-tasks/P4-tag-system.md
+docs/cursor-tasks/P5-liquid-tech-style.md
+docs/cursor-tasks/P6-daily-note-blocks.md
+learning-log/knowledge-base/common-errors.md
+learning-log/knowledge-base/jpa-entity-design.md
+learning-log/knowledge-base/spring-boot-config.md
+learning-log/knowledge-base/spring-mvc-controller.md
+learning-log/problem-summary.md
+src/main/java/com/LinkedKnowledge/common/LlmClient.java
+src/main/java/com/LinkedKnowledge/config/RedisConfig.java
+src/main/java/com/LinkedKnowledge/controller/AuthController.java
+src/main/java/com/LinkedKnowledge/demo/CollectionDemo.java
+src/main/resources/application.yml
+骨架节点：未分类
+思考路径：[待补充]
+```
+
+
+## 2026-09-05 18:29:27 - Merge remote-tracking branch 'origin/slave' into slave
+
+```
+时间戳：2026-09-05 18:29:27
+操作：Merge remote-tracking branch 'origin/slave' into slave
+提交哈希：760e9c4
+变更文件：
+
+骨架节点：未分类
+思考路径：[待补充]
+```
+
+
+## 2026-09-05 18:29:35 - Merge remote-tracking branch 'origin/slave' into slave
+
+```
+时间戳：2026-09-05 18:29:35
+操作：Merge remote-tracking branch 'origin/slave' into slave
+提交哈希：32c1647
+变更文件：
+
+骨架节点：未分类
+思考路径：[待补充]
+```
+

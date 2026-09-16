@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:redis}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+jwt:
+  secret: ${JWT_SECRET}
+
+sms:
+  dev-echo: false
+
+llm:
+  api-key: "${LLM_API_KEY:${MINIMAX_CN_API_KEY:}}"
