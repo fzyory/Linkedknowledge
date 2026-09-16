@@ -1,0 +1,9 @@
+.git
+.idea
+.vscode
+target
+learning-log
+docs
+*.md
+deploy/.env
+.env
