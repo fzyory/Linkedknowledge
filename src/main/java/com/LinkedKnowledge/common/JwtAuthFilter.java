@@ -1,17 +1,18 @@
 package com.LinkedKnowledge.common;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component                    // Spring 管理，自动实例化
 @RequiredArgsConstructor      // 对 final 字段生成构造器（构造器注入）
@@ -70,13 +71,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         //       ② 验签名（Signature）
         //       ③ 检查是否过期（exp）
         // 4.1 查 redis 黑名单（在 validateToken 之前检查,被拉黑的 token 直接拒绝）
-        if (redisTemplate.hasKey("blacklist:" + token)) {
+        if (Boolean.TRUE.equals(redisTemplate.hasKey("blacklist:" + token))) {
             writeUnauthorized(response, "token已失效,请重新登录");
             return;
         }
         // 4.2 验签 + 检查过期
         if (!jwtUtil.validateToken(token)) {
-            // 签名无效或过期 → 返回 401
             writeUnauthorized(response, "token无效或已过期");
             return;
         }
